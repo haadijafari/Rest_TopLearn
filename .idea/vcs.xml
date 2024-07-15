@@ -11,6 +11,8 @@
     </option>
   </component>
   <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Django_Empty_Project_Template" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Todo" vcs="Git" />
   </component>
 </project>
