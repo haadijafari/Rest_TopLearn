@@ -8,5 +8,7 @@ urlpatterns = [
     path('cbv', views.TodoListApiView.as_view(), name='all_todos_cbv'),
     path('cbv/<int:todo_id>', views.TodoDetailApiView.as_view(), name='todo_detail_mixin'),
     path('mixins', views.TodoListMixinApiView.as_view(), name='all_todos_cbv'),
-    path('mixins/<int:pk>', views.TodoDetailMixinApiView.as_view(), name='todo_detail_mixin'),
+    path('mixins/<int:pk>', views.TodoDetailMixinApiView.as_view(), name='todo_detail_generic'),
+    path('generics', views.TodoListGenericApiView.as_view(), name='all_todos_cbv'),
+    path('generics/<int:pk>', views.TodoDetailGenericApiView.as_view(), name='todo_detail_generic'),
 ]
