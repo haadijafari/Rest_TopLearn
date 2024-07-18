@@ -1,12 +1,16 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins, generics, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
 
 from .models import Todo
-from .serializers import TodoSerializer
+from .serializers import TodoSerializer, UserSerializer
+
+User = get_user_model()
 
 
 # region function base apis
@@ -117,14 +121,25 @@ class TodoDetailMixinApiView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin,
 # endregion
 
 # region class base apis using generics
+class TodoListApiPagination(PageNumberPagination):
+    page_size = 3
+
+
 class TodoListGenericApiView(generics.ListCreateAPIView):
     queryset = Todo.objects.order_by('priority').all()
     serializer_class = TodoSerializer
+    pagination_class = TodoListApiPagination
 
 
 class TodoDetailGenericApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Todo.objects.order_by('priority').all()
     serializer_class = TodoSerializer
+
+
+class UserListGenericApiView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    pagination_class = TodoListApiPagination
 
 
 # endregion
@@ -133,5 +148,6 @@ class TodoDetailGenericApiView(generics.RetrieveUpdateDestroyAPIView):
 class TodoViewSetApiView(viewsets.ModelViewSet):
     queryset = Todo.objects.order_by('priority').all()
     serializer_class = TodoSerializer
+    pagination_class = TodoListApiPagination
 
 # endregion
