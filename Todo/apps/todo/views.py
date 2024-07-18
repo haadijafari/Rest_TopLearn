@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -83,4 +83,34 @@ class TodoDetailApiView(APIView):
         todo = get_object_or_404(Todo, pk=todo_id)
         todo.delete()
         return Response(None, status.HTTP_204_NO_CONTENT)
+
+
+# endregion
+
+# region class base apis using mixins
+class TodoListMixinApiView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Todo.objects.order_by('priority').all()
+    serializer_class = TodoSerializer
+
+    def get(self, request: Request):
+        return self.list(request)
+
+    def post(self, request: Response):
+        return self.create(request)
+
+
+class TodoDetailMixinApiView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                             generics.GenericAPIView):
+    queryset = Todo.objects.order_by('priority').all()
+    serializer_class = TodoSerializer
+
+    def get(self, request: Request, pk: int):
+        return self.retrieve(request, pk)
+
+    def put(self, request: Request, pk: int):
+        return self.update(request, pk)
+
+    def delete(self, request: Request, pk: int):
+        return self.destroy(request, pk)
+
 # endregion
